@@ -1,17 +1,19 @@
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 
-def xor_bytes(a: bytes, b: bytes) -> bytes:
-    return bytes(x ^ y for x, y in zip(a, b)) # whyy
 
-def encrypt_cfb(plaintext: bytes, key:bytes) -> bytes:
+def xor_bytes(a: bytes, b: bytes) -> bytes:
+    return bytes(x ^ y for x, y in zip(a, b))  # whyy
+
+
+def encrypt_cfb(plaintext: bytes, key: bytes) -> bytes:
     iv = get_random_bytes(16)
     cipher = AES.new(key, AES.MODE_CBC)
     ciphertext = b""
     previous = iv
     block_size = 16
 
-    for i in range (0, len(plaintext), block_size):
+    for i in range(0, len(plaintext), block_size):
         block = plaintext[i: i + block_size]
         encrypted = cipher.encrypt(previous)
 
@@ -19,6 +21,7 @@ def encrypt_cfb(plaintext: bytes, key:bytes) -> bytes:
         ciphertext += cipher_block
         previous = cipher_block
         return iv + ciphertext
+
 
 def main():
     # Тест с ФИО
