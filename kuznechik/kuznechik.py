@@ -160,3 +160,31 @@ def decrypt_block(block, round_keys, inv_s_box):
         state = sub_bytes(state, inv_s_box)
         state = xor_bytes(state, round_keys[i])
     return state
+
+
+def pad(data, block_size=8):
+    """
+    Функция дополнения данных
+    Args:
+        data:
+        block_size:
+
+    Returns:
+
+    """
+    pad_len = block_size - (len(data) % block_size)
+    return data + bytes([pad_len] * pad_len)  # дополняем данные нужным количеством
+
+
+def unpad(data):
+    """
+    Удаление доп байтов после дешифрования
+    Args:
+        data:
+
+    Returns:
+
+    """
+    pad_len = data[
+        -1]  # Последний байт данных указывает, сколько байтов было добавлено при padding
+    return data[:-pad_len]
