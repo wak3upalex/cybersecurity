@@ -56,3 +56,13 @@ def L_inv(state):
     for _ in range(8):
         state = R_inv(state)
     return state
+
+
+# Generating keys
+def key_schedule(main_key, s_box):
+    # main key of 16 bytes will be divided on 8 and 8 bytes
+    K1 = main_key[:8]
+    K2 = main_key[8:]
+
+    round_keys = []
+
