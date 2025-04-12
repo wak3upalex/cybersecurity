@@ -75,6 +75,7 @@ def generate_s_boxes(key):
         inv_s_box[val] = i
     return s_box, inv_s_box
 
+
 def sub_bytes(data, s_box):
     """
     Функция подстановки байтов (S-блок)
@@ -89,9 +90,22 @@ def sub_bytes(data, s_box):
     """
     return [s_box[x] for x in data]
 
+
 def key_schedule(main_key, s_box):
     # main key of 16 bytes will be divided on 8 and 8 bytes
     K1 = main_key[:8]
     K2 = main_key[8:]
 
     round_keys = []
+    for i in range(1, 11):
+        # создаем значение на раунд. Первый байт по номеру раунда, второй просто нули
+        RC = [i] + [0] * 7
+        temp = xor_bytes(K1, RC)
+        temp = sub_bytes(temp, s_box)
+        temp = L(temp)
+        # формируем новый ключ
+        new_key = xor_bytes(temp, K2)
+        round_keys.append(new_key)
+        # после каждого раунда значение K1 присваивается новому ключу, а K2 получает предыдущий K1
+        K1, K2 = new_key, K1
+    return round_keys
