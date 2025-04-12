@@ -92,6 +92,15 @@ def sub_bytes(data, s_box):
 
 
 def key_schedule(main_key, s_box):
+    """
+    генерация ключей
+    Args:
+        main_key:
+        s_box:
+
+    Returns:
+
+    """
     # main key of 16 bytes will be divided on 8 and 8 bytes
     K1 = main_key[:8]
     K2 = main_key[8:]
@@ -109,3 +118,24 @@ def key_schedule(main_key, s_box):
         # после каждого раунда значение K1 присваивается новому ключу, а K2 получает предыдущий K1
         K1, K2 = new_key, K1
     return round_keys
+
+def encrypt_block(block, round_keys, s_box):
+    """
+    Шифрование блока текста
+    Args:
+        block:
+        round_keys:
+        s_box:
+
+    Returns:
+
+    """
+    state = block[:]  # копия блока
+    for i in range(9):
+        # с раундовым ключом
+        state = xor_bytes(state, round_keys[i])
+
+        state = sub_bytes(state, s_box)
+        state = L(state)
+    state = xor_bytes(state, round_keys[9])
+    return state
