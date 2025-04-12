@@ -31,8 +31,6 @@ def R(state):
 
     Returns:
         циклический сдвиг влево. Через срез байтов `state` берет срез с первого элемента до конца, а [new_val] добавляется в конец.
-
-
     """
     new_val = 0
     for i in range(8):
@@ -51,8 +49,7 @@ def R_inv(state):
     # for each state multiplying on coef and XOR with
     for i in range(7):
         x0 ^= gf_mul(state[i], coefficients[i + 1])
-    return [x0] + state[
-                  :7]  # new list with beginning of x0 and leftover is initial state of 7 elements
+    return [x0] + state[:7]  # new list with beginning of x0 and leftover is initial state of 7 elements
 
 
 def L_inv(state):
