@@ -193,6 +193,34 @@ def unpad(data):
 def bytes_to_list(b):
     return list(b)
 
+
 def list_to_bytes(lst):
     return bytes(lst)
 
+
+def process_file(input_filename, output_filename, key):
+    with open(input_filename, 'rb') as f:
+        data = f.read()
+    padded_data = pad(data, 8)
+    blocks = [bytes_to_list(padded_data[i:i + 8]) for i in range(0, len(padded_data), 8)]
+
+    key_list = list(key)
+    s_box, inv_s_box = generate_s_boxes(key_list)
+    round_keys = key_schedule(key_list, s_box)
+
+    encrypted_blocks = [encrypt_block(block, round_keys, s_box) for block in blocks]
+    encrypted_data = b''.join(list_to_bytes(block) for block in encrypted_blocks)
+
+    with open(output_filename, 'wb') as f:
+        f.write(encrypted_data)
+
+    decrypted_blocks = [decrypt_block(block, round_keys, inv_s_box) for block in encrypted_blocks]
+    decrypted_data = b''.join(list_to_bytes(block) for block in decrypted_blocks)
+    decrypted_data = unpad(decrypted_data)
+
+    print("Исходные данные:")
+    print(data)
+    print("\nЗашифрованные данные (hex):")
+    print(encrypted_data.hex())
+    print("\nДешифрованные данные:")
+    print(decrypted_data)
