@@ -39,7 +39,17 @@ def R(state):
         new_val ^= gf_mul(state[i], coefficients[i])
     return state[1:] + [new_val]
 
+
 def L(state):
     for _ in range(8):
         state = R(state)
     return state
+
+
+def R_inv(state):
+    x0 = state[7]  # last byte of state
+    # for each state multiplying on coef and XOR with
+    for i in range(7):
+        x0 ^= gf_mul(state[i], coefficients[i + 1])
+    return [x0] + state[
+                  :7]  # new list with beginning of x0 and leftover is initial state of 7 elements
