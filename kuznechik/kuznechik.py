@@ -119,6 +119,7 @@ def key_schedule(main_key, s_box):
         K1, K2 = new_key, K1
     return round_keys
 
+
 def encrypt_block(block, round_keys, s_box):
     """
     Шифрование блока текста
@@ -138,4 +139,24 @@ def encrypt_block(block, round_keys, s_box):
         state = sub_bytes(state, s_box)
         state = L(state)
     state = xor_bytes(state, round_keys[9])
+    return state
+
+
+def decrypt_block(block, round_keys, inv_s_box):
+    """
+    Дешифрование блока
+    Args:
+        block:
+        round_keys:
+        inv_s_box:
+
+    Returns:
+
+    """
+    state = block[:]  # копия блока
+    state = xor_bytes(state, round_keys[9])
+    for i in reversed(range(9)):
+        state = L_inv(state)
+        state = sub_bytes(state, inv_s_box)
+        state = xor_bytes(state, round_keys[i])
     return state
