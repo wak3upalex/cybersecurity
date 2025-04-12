@@ -11,3 +11,7 @@ def gf_mul(a, b, poly=0x171):
             a ^= poly
         b >>= 1
     return result & 0xFF
+
+# (xor_bytes) Функция поразрядного XOR для байтовых последовательностей:
+def xor_bytes(a, b):
+    return [x ^ y for x, y in zip(a, b)]
