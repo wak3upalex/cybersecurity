@@ -1,4 +1,6 @@
 # 5. Полином - | **0x171** | x⁸ + x⁶ + x⁵ + x⁴ + 1|, размер блока 8 байт
+import random
+
 
 # (gf_mul) Функция умножения в поле Галуа GF(2⁸) с редукцией по полиному (0x171)
 def gf_mul(a, b, poly=0x171):
@@ -49,7 +51,8 @@ def R_inv(state):
     # for each state multiplying on coef and XOR with
     for i in range(7):
         x0 ^= gf_mul(state[i], coefficients[i + 1])
-    return [x0] + state[:7]  # new list with beginning of x0 and leftover is initial state of 7 elements
+    return [x0] + state[
+                  :7]  # new list with beginning of x0 and leftover is initial state of 7 elements
 
 
 def L_inv(state):
@@ -59,10 +62,23 @@ def L_inv(state):
 
 
 # Generating keys
+def generate_s_boxes(key):
+    seed_val = sum(key)  # sum all bytes of our key for getting determined value of our key
+    random.seed(seed_val)  # setting initial state for generating numbers
+    # generating S box/block π0
+    s_box = list(range(256))
+    random.shuffle(s_box)
+    # making invet s box π1
+    inv_s_box = [0] * 256
+    # for i position val value we are turning on val position i value
+    for i, val in enumerate(s_box):
+        inv_s_box[val] = i
+    return s_box, inv_s_box
+
+
 def key_schedule(main_key, s_box):
     # main key of 16 bytes will be divided on 8 and 8 bytes
     K1 = main_key[:8]
     K2 = main_key[8:]
 
     round_keys = []
-
