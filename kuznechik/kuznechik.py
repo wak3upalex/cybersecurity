@@ -188,3 +188,11 @@ def unpad(data):
     pad_len = data[
         -1]  # Последний байт данных указывает, сколько байтов было добавлено при padding
     return data[:-pad_len]
+
+
+def bytes_to_list(b):
+    return list(b)
+
+def list_to_bytes(lst):
+    return bytes(lst)
+
