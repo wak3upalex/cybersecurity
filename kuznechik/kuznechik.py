@@ -53,3 +53,9 @@ def R_inv(state):
         x0 ^= gf_mul(state[i], coefficients[i + 1])
     return [x0] + state[
                   :7]  # new list with beginning of x0 and leftover is initial state of 7 elements
+
+
+def L_inv(state):
+    for _ in range(8):
+        state = R_inv(state)
+    return state
