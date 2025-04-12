@@ -75,6 +75,19 @@ def generate_s_boxes(key):
         inv_s_box[val] = i
     return s_box, inv_s_box
 
+def sub_bytes(data, s_box):
+    """
+    Функция подстановки байтов (S-блок)
+
+    Args:
+        data: каждый байт из входного списка `data` на соответствующее значение из S-блока `s_box`.
+        s_box: S-блок
+
+    Returns:
+        Каждое значение из входного списка обрабатывается по таблице, формируя новый список заменённых байтов.
+
+    """
+    return [s_box[x] for x in data]
 
 def key_schedule(main_key, s_box):
     # main key of 16 bytes will be divided on 8 and 8 bytes
