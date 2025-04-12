@@ -38,3 +38,8 @@ def R(state):
     for i in range(8):
         new_val ^= gf_mul(state[i], coefficients[i])
     return state[1:] + [new_val]
+
+def L(state):
+    for _ in range(8):
+        state = R(state)
+    return state
