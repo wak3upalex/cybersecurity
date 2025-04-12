@@ -12,6 +12,29 @@ def gf_mul(a, b, poly=0x171):
         b >>= 1
     return result & 0xFF
 
+
 # (xor_bytes) Функция поразрядного XOR для байтовых последовательностей:
 def xor_bytes(a, b):
     return [x ^ y for x, y in zip(a, b)]
+
+
+coefficients = [1, 2, 3, 4, 5, 6, 7, 8]
+
+
+def R(state):
+    """
+    Функция R
+
+    Каждый байт списка умножается на один из коэффициентов `coefficients`. Затем результаты суммируются по XOR, где к `new_val` прибавляется через XOR значение результата умножения Галуа
+    Args:
+        state: список из 8 байтов
+
+    Returns:
+        циклический сдвиг влево. Через срез байтов `state` берет срез с первого элемента до конца, а [new_val] добавляется в конец.
+
+
+    """
+    new_val = 0
+    for i in range(8):
+        new_val ^= gf_mul(state[i], coefficients[i])
+    return state[1:] + [new_val]
